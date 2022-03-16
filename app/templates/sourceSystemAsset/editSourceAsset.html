@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en-IN">
+<head>
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nicepage.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "Site1",
+		"logo": "images/logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="home">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+</head>
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+<body style="background-color: #f8f8f8">
+  <div id="content">
+    {% block header %}
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" width="25" height="30">
+      <div class="header-right">
+        <a class="active" href="/">Home</a>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</body>
+
+<div class="container" style="padding-bottom: 20px;">
+  <div class="flex-container">
+    <h1 class="table_frame_heading" style="color:#bd2c2c">Modify Asset</h1>
+    <div style="float:right; padding-right: 20px;">
+      <div class="action-fmwrk-button;">
+        <button id="cancel_button"; class="fmwrk-button" type="button" style="float:right;">Cancel</button>
+        <button id="submit_button"; class="fmwrk-button" type="button" style="float:right;" onclick="submitform()">Submit</button>
+      </div>
+    </div>
+  </div>
+  <div class="triple_frame_section" style="overflow-x: auto; height: 500px;">
+    <div class="heading heading-style">{{gen_data.asset_nm}}</div>
+    <form id="data_asset_gen_det">
+      <div class="triple_frame_section-left" style="padding-left: 100px;">
+        <label class="form_attribute_headings" for="src_sys_id">Data Asset Id</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="asset_id" name="asset_id" value="{{gen_data.asset_id}}" disabled><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Target System Id</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="target_id" name="target_id" value="{{gen_data.target_id}}" disabled><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">File Format</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="file_type" name="file_type" value="{{gen_data.file_type}}"><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Primary Subject Area</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="subj_area_1" name="subj_area_1" value="{{gen_data.subj_area_1}}"><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Secondary Subject Area</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="subj_area_2" name="subj_area_2" value="{{gen_data.subj_area_2}}"><br><br>
+      </div>
+      <div class="triple_frame_section-middle" style="padding-left: 100px;">
+        <label class="form_attribute_headings" for="src_sys_id">Data Asset Name</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="asset_nm" name="asset_nm" value="{{gen_data.asset_nm}} disabled"><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">File Header</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="file_header" name="file_header" value="{{gen_data.file_header}}"><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Support Contact</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="support_cntct" name="support_cntct" value="{{gen_data.support_cntct}}"><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Data Owner</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="asset_owner" name="asset_owner" value="{{gen_data.asset_owner}}"><br><br>
+      </div>
+      <div class="triple_frame_section-right" style="padding-left: 100px;">
+        <label class="form_attribute_headings" for="src_sys_id">Source System Id</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="src_sys_id" name="src_sys_id" value="{{gen_data.src_sys_id}}" disabled><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Multi-part Indicator</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="multipartition" name="multipartition" value="{{gen_data.multipartition}}" disabled><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Trigger File Pattern</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="trigger_file_pattern" name="trigger_file_pattern" value="{{gen_data.trigger_file_pattern}}" disabled><br><br>
+        <label class="form_attribute_headings" for="src_sys_id">Delimiter</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="file_delim" name="file_delim" value="{{gen_data.file_delim}}"><br><br>
+      </div>
+    </form>
+  </div><br><br>
+  <div class="data_detail_frame" style="height:1000px; min-height: auto;">
+    <div></div><br>
+    {% for dict_item in col_data %}
+      <form id="data_asset_col_det{{dict_item.col_id}}">      
+        <div class="column_detail_block" style="height: 280px;">
+          <div class="triple_frame_section" style="background-color: rgb(255, 247, 247)">
+            <div class="triple_frame_section-left" style="padding-left: 100px;">
+              <label class="form_attribute_headings" for="src_sys_id">Column Id</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="col_id{{dict_item.col_id}}" name="col_id" value="{{dict_item.col_id}}" disabled><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Column Description</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="col_desc{{dict_item.col_id}}" name="col_desc" value="{{dict_item.col_desc}}"><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Primary Key</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="pk_ind{{dict_item.col_id}}" name="pk_ind" value="{{dict_item.pk_ind}}"><br><br>
+            </div>
+            <div class="triple_frame_section-middle" style="padding-left: 100px;">
+              <label class="form_attribute_headings" for="src_sys_id">Column Name</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="col_nm{{dict_item.col_id}}" name="col_nm" value="{{dict_item.col_nm}}"><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Column Length</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="col_length{{dict_item.col_id}}" name="col_length" value="{{dict_item.col_length}}"><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Nullable</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="nullable{{dict_item.col_id}}" name="nullable" value="{{dict_item.nullable}}"><br><br>
+            </div>
+            <div class="triple_frame_section-right" style="padding-left: 100px;">
+              <label class="form_attribute_headings" for="Classification">Classification</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="data_classification{{dict_item.col_id}}" name="data_classification" value="{{dict_item.data_classification}}" disabled><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Tokenization</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="req_tokenization{{dict_item.col_id}}" name="req_tokenization" value="{{dict_item.req_tokenization}}" disabled><br><br>
+              <label class="form_attribute_headings" for="src_sys_id">Data Type</label><br>
+              <input class="form_attribute_values" size="20" type="text" id="data_type{{dict_item.col_id}}" name="data_type" value="{{dict_item.data_type}}" disabled><br><br>
+            </div>
+          </div>
+        </div>
+      </form>
+    {% endfor %}
+  </div>
+  <!--
+  <div class="action-fmwrk-button;" style="margin-top:-30px;">
+    <button id="add_column"; class="fmwrk-button" type="button" style="float:left; width: 100px; height: 30px; font-size: 12px;" onclick="addColumn()">Add Column</button><br><br>
+  </div>
+  -->
+  <div></div><br><br>
+</div>
+<div id="overlay" onclick="submitform()"></div>
+<div id="loader" class="loader"></div>
+
+<script type="text/javascript">
+  var no_of_cols = '{{ no_of_cols }}'
+  var dataAssetColDet = { "columns": []}
+
+  function formToJsonGenDet(formList){
+    data = {}
+    console.log(formList)
+    for(var i=0; i<formList.length; i++) {
+      var element = formList[i]
+      data[element.name] = element.value
+    }
+    return JSON.stringify(data);
+  }
+
+  function submitform(){
+    $("#asset_id").prop('disabled', false);
+    $("#src_sys_id").prop('disabled', false);
+    $("#target_id").prop('disabled', false);
+    $("#multipartition").prop('disabled', false);
+    var dataAssetGenDet = formToJsonGenDet($('#data_asset_gen_det').serializeArray())
+
+    for(i=1; i<=no_of_cols; i++) {
+      $("#" + "col_id" + i).prop('disabled', false);
+      $("#" + "data_classification" + i).prop('disabled', false);
+      $("#" + "req_tokenization" + i).prop('disabled', false);
+      $("#" + "data_type" + i).prop('disabled', false);
+      dataAssetColDet.columns[i-1] = formToJsonGenDet($("#" + "data_asset_col_det" + i).serializeArray())
+    }
+    
+    $("#asset_id").prop('disabled', true);
+    $("#src_sys_id").prop('disabled', true);
+    $("#target_id").prop('disabled', true);
+    $("#multipartition").prop('disabled', true);
+
+    for(i=1; i<=no_of_cols; i++) {
+      $("#" + "col_id" + i).prop('disabled', true);
+      $("#" + "data_classification" + i).prop('disabled', true);
+      $("#" + "req_tokenization" + i).prop('disabled', true);
+      $("#" + "data_type" + i).prop('disabled', true);
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/sourceSystemAsset/editSourceAsset/modify",
+      data: JSON.stringify({"dataAssetGenDet": dataAssetGenDet, "dataAssetColDet": dataAssetColDet}),
+      dataType: "json",
+      contentType: "application/json; charset=utf-8;",
+      crossDomain: true,
+      beforeSend: function(){
+        document.getElementById("overlay").style.display = "block";
+        $('.loader').css("visibility", "visible");
+      },
+      complete: function(){
+        $('.loader').css("visibility", "visible");
+    },
+      success: function(response) {
+        if (response.redirect) {
+          window.location.href = response.redirect;
+        }
+      },
+    })
+  };
+</script>

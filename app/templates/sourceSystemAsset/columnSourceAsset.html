@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en-IN">
+<head>
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nicepage.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "Site1",
+		"logo": "images/logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="home">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+</head>
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+<body style="background-color: #f8f8f8">
+  <div id="content">
+    {% block header %}
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" width="25" height="30">
+      <div class="header-right">
+        <a class="active" href="/">Home</a>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</body>
+
+<div class="container">
+  <h1 style="margin-top: 20px; margin-bottom: 20px;text-align:left;">Data Asset</h1>
+  <div class="triple_frame_section">
+    <div class="heading heading-style">{{gen_data.asset_nm}}</div>
+    <div class="triple_frame_section-left" style="padding-left: 100px;">
+      <p class="dataDetail_headings">Data Asset Id</p>
+      <p class="dataDetail_values">{{gen_data.asset_id}}</p>
+      <p class="dataDetail_headings">Target System Id</p>
+      <p class="dataDetail_values">{{gen_data.target_id}}</p>
+      <p class="dataDetail_headings">File Format</p>
+      <p class="dataDetail_values">{{gen_data.file_type}}</p>
+      <p class="dataDetail_headings">Primary Subject Area</p>
+      <p class="dataDetail_values">{{gen_data.subj_area_1}}</p>
+      <p class="dataDetail_headings">Secondary Subject Area</p>
+      <p class="dataDetail_values">{{gen_data.subj_area_2}}</p>
+    </div>
+    <div class="triple_frame_section-middle" style="padding-left: 100px;">
+      <p class="dataDetail_headings">Data Asset Name</p>
+      <p class="dataDetail_values">{{gen_data.asset_nm}}</p>
+      <p class="dataDetail_headings">File Header</p>
+      <p class="dataDetail_values">{{gen_data.file_header}}</p>
+      <p class="dataDetail_headings">Support Contact</p>
+      <p class="dataDetail_values">{{gen_data.support_cntct}}</p>
+      <p class="dataDetail_headings">Data Owner</p>
+      <p class="dataDetail_values">{{gen_data.asset_owner}}</p>
+    </div>
+    <div class="triple_frame_section-right" style="padding-left: 100px;">
+      <p class="dataDetail_headings">Primary Subject Area</p>
+      <p class="dataDetail_values">{{gen_data.subj_area_1}}</p>
+      <p class="dataDetail_headings">Multi-part Indicator</p>
+      <p class="dataDetail_values">{{gen_data.multipartition}}</p>
+      <p class="dataDetail_headings">Trigger File Pattern</p>
+      <p class="dataDetail_values">{{gen_data.trigger_file_pattern}}</p>
+      <p class="dataDetail_headings">Delimiter</p>
+      <p class="dataDetail_values">{{gen_data.file_delim}}</p>
+    </div>
+  </div><br><br>
+  <div class="data_detail_frame" style="height:1000px; min-height: auto;">
+    <div></div><br>
+    {% for dict_item in col_data %}
+      <div class="column_detail_block">
+        <div class="triple_frame_section" style="background-color: rgb(255, 247, 247)">
+          <div class="triple_frame_section-left" style="padding-left: 100px;">
+            <p class="dataDetail_headings">Column Id</p>
+            <p class="dataDetail_values">{{dict_item.col_id}}</p>
+            <p class="dataDetail_headings">Column Description</p>
+            <p class="dataDetail_values">{{dict_item.col_desc}}</p>
+            <p class="dataDetail_headings">Primary Key</p>
+            <p class="dataDetail_values">{{dict_item.pk_ind}}</p>
+          </div>
+          <div class="triple_frame_section-middle" style="padding-left: 100px;">
+            <p class="dataDetail_headings">Column Name</p>
+            <p class="dataDetail_values">{{dict_item.col_nm}}</p>
+            <p class="dataDetail_headings">Column Length</p>
+            <p class="dataDetail_values">{{dict_item.col_length}}</p>
+            <p class="dataDetail_headings">Nullable</p>
+            <p class="dataDetail_values">{{dict_item.nullable}}</p>
+          </div>
+          <div class="triple_frame_section-right" style="padding-left: 100px;">
+            <p class="dataDetail_headings">Classification</p>
+            <p class="dataDetail_values">{{dict_item.data_classification}}</p>
+            <p class="dataDetail_headings">Tokenization</p>
+            <p class="dataDetail_values">{{dict_item.req_tokenization}}</p>
+            <p class="dataDetail_headings">Data Type</p>
+            <p class="dataDetail_values">{{dict_item.data_type}}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <div></div><br>
+  </div><br><br>
+</div>

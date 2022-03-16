@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block tableHeader %}
+  <table id="data" class="table table-hover">
+    <thead>
+      <tr style="color: #920000; background: rgb(218, 218, 218); border: #920000">
+        <th>Data Asset Id</th>
+        <th>Source System Id</th>
+        <th>Data Asset Name</th>
+        <th>Primary Subject Area</th>
+        <th>Target System Id</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block tableContent %}
+<script>
+  $(document).ready(function () {
+    var table = $('#data').DataTable({
+      ajax: { "url": "/sourceSystemAsset/data" },
+      columns: [
+        {data: 'asset_id', orderable: true},
+        {data: 'src_sys_id', orderable: true},
+        {data: 'asset_nm', orderable: true},
+        {data: 'subj_area_1', orderable: true},
+        {data: 'target_id', orderable: true},
+      ],
+    });
+
+    $('#data tbody').on('click', 'tr', function (row) {
+      var cur_row = table.row( this ).data();
+      $('#data tbody > tr').removeClass('tableRow_selected');
+      $(this).addClass('tableRow_selected');
+      var builtHTML = ' \
+      <div class="data_detail_frame"> \
+        <div style="float:left; padding-left: 85%; margin-top:-30px">\
+          <div class="action-fmwrk-button;">\
+            <button id="column_button"; class="fmwrk-button" type="button" style="float:right;">Columns</button>\
+            <button id="catalog_button"; class="fmwrk-button" type="button" style="float:right;">Catalog</button>\
+          </div>\
+        </div>\
+        <div id="content left" style="float:left; width: 50%; padding-left:150px; padding-top:20px"> \
+          <p class="dataDetail_headings">Data Asset Id</p> \
+          <p class="dataDetail_values">' + cur_row["asset_id"] + '</p> \
+          <p class="dataDetail_headings">Source System Id</p> \
+          <p class="dataDetail_values">' + cur_row["src_sys_id"] + '</p> \
+          <p class="dataDetail_headings">Data Asset Name</p> \
+          <p class="dataDetail_values">' + cur_row["asset_nm"] + '</p> \
+          <p class="dataDetail_headings">Primary Subject Area</p> \
+          <p class="dataDetail_values">' + cur_row["subj_area_1"] + '</p> \
+          <p class="dataDetail_headings">Target System Id</p> \
+          <p class="dataDetail_values">' + cur_row["target_id"] + '</p> \
+          <p class="dataDetail_headings">File Header</p> \
+          <p class="dataDetail_values">' + cur_row["file_header"] + '</p> \
+          <p class="dataDetail_headings">Multi-part Indicator</p> \
+          <p class="dataDetail_values">' + cur_row["multipartition"] + '</p> \
+        </div> \
+        <div id="content right" style="float:right; padding-right: 200px; padding-top:20px"> \
+            <p class="dataDetail_headings">File Format</p> \
+            <p class="dataDetail_values">' + cur_row["file_type"] + '</p> \
+            <p class="dataDetail_headings">Support Contact</p> \
+            <p class="dataDetail_values">' + cur_row["support_cntct"] + '</p> \
+            <p class="dataDetail_headings">Trigger File Pattern</p> \
+            <p class="dataDetail_values">' + cur_row["trigger_file_pattern"] + '</p> \
+            <p class="dataDetail_headings">Secondary Subject Area</p> \
+            <p class="dataDetail_values">' + cur_row["subj_area_2"] + '</p> \
+            <p class="dataDetail_headings">Data Owner</p> \
+            <p class="dataDetail_values">' + cur_row["asset_owner"] + '</p> \
+            <p class="dataDetail_headings">Delimiter</p> \
+            <p class="dataDetail_values">' + cur_row["file_delim"] + '</p> \
+        </div> \
+      </div>'
+
+      document.getElementById("srcSysAttributes").innerHTML = builtHTML;
+      if ($(this).hasClass('tableRow_selected')) {
+        var create_button = document.getElementById("create_button");
+        var modify_button = document.getElementById("modify_button");
+        var delete_button = document.getElementById("delete_button");
+        modify_button.disabled = false;
+        delete_button.disabled = false;
+      }
+
+      document.getElementById("modify_button").onclick = function () {
+        location.href = "/sourceSystemAsset/editSourceAsset?asset_id="+cur_row["asset_id"];
+      }
+
+      document.getElementById("delete_button").onclick = function () {
+        location.href = "/sourceSystemAsset/deleteSourceAsset?asset_id="+cur_row["asset_id"];
+      }
+
+      document.getElementById("catalog_button").onclick = function () {
+        location.href = "/sourceSystemAsset/catalogSourceAsset?asset_id="+cur_row["asset_id"];
+      }
+
+      document.getElementById("column_button").onclick = function () {
+        location.href = "/sourceSystemAsset/columnSourceAsset?asset_id="+cur_row["asset_id"];
+      }
+    });
+    document.getElementById("create_button").onclick = function () {
+      location.href = "/sourceSystemAsset/createSourceAsset";
+    }
+  });
+</script>
+{% endblock %}
+
+{% block tableContentDetails %}
+  <div id = srcSysAttributes></div>
+{% endblock %}

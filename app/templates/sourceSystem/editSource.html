@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en-IN">
+<head>
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nicepage.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <style>
+    .item3 {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+  </style>
+  <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "Site1",
+		"logo": "images/logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="home">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+</head>
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+<body>
+  <div id="content">
+    {% block header %}
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" width="25" height="30">
+      <div class="header-right">
+        <a class="active" href="#home">Home</a>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</body>
+
+<div class="container">
+  <h1 style="margin-top: 20px; margin-bottom: 20px;text-align:left;">Modify Source System</h1>
+  <hr style="width:70%;text-align:left;margin-top:5px;color:#640000"></hr><br>
+  <form id="source_system" style="margin-left:20px">
+      <label class="form_attribute_headings" for="src_sys_id">Source System Id</label><br>
+      <input class="form_attribute_values" size="35" type="text" id="src_sys_id" name="src_sys_id" value="{{data.src_sys_id}}" disabled><br><br>
+      <label class="form_attribute_headings" for="src_sys_nm">Source System Name</label><br>
+      <input class="form_attribute_values" size="35" type="text" id="src_sys_nm" name="src_sys_nm" value="{{data.src_sys_nm}}"><br><br>
+      <label class="form_attribute_headings" for="data_owner">Data Owner</label><br>
+      <input class="form_attribute_values" size="35" type="text" id="data_owner" name="data_owner" value="{{data.data_owner}}"><br><br>
+      <label class="form_attribute_headings" for="mechanism">Mechanism</label><br>
+      <select class="form_attribute_values" type="text" id="mechanism" name="mechanism" value="{{data.mechanism}}" disabled>
+        <option value="push">push</option>
+        <option value="pull">pull</option>
+      </select><br><br>
+      <label class="form_attribute_headings" for="bucket_name">Bucket Name</label><br>
+      <input class="form_attribute_values" size="35" type="text" id="bucket_name" name="bucket_name" value="{{data.bucket_name}}" disabled><br><br>
+      <label class="form_attribute_headings" for="support_cntct">Support Contact</label><br>
+      <input class="form_attribute_values" size="35" type="text" id="support_cntct" name="support_cntct" value="{{data.support_cntct}}"><br><br>
+      <button id="submit_button"; class="fmwrk-button" type="button" style="float:left;" onclick="submitform()">Submit</button>
+      <button id="cancel_button"; class="fmwrk-button" type="button" style="float:left;" onclick="cancelform()">Cancel</button>
+  </form>
+</div>
+<div id="overlay" onclick="submitform()"></div>
+<div id="loader" class="loader"></div>
+<!--
+<h5 id="center_text" style="margin-top:50%; margin-left:50%; color: rgb(168, 73, 73); visibility: hidden">This might take few minutes</h5>
+-->
+
+<script>
+  function formToJson(formList){
+    srcSysData = {}
+    for(var i=0; i<formList.length; i++) {
+      var element = formList[i]
+      srcSysData[element.name] = element.value
+    }
+    return JSON.stringify(srcSysData);
+  }
+
+  function submitform(){
+    $("#src_sys_id").prop('disabled', false);
+    $("#mechanism").prop('disabled', false);
+    $("#bucket_name").prop('disabled', false);
+    var srcSysData = formToJson($('#source_system').serializeArray())
+    console.log(srcSysData)
+    $("#src_sys_id").prop('disabled', true);
+    $("#mechanism").prop('disabled', true);
+    $("#bucket_name").prop('disabled', true);
+
+    $.ajax({
+      type: "POST",
+      url: "/sourceSystem/editSource/modify",
+      data: srcSysData,
+      dataType: "json",
+      contentType: "application/json; charset=utf-8;",
+      crossDomain: true,
+      beforeSend: function(){
+        document.getElementById("overlay").style.display = "block";
+        //document.getElementById("center_text").style.visibility = "visible";
+        $('.loader').css("visibility", "visible");
+      },
+      complete: function(){
+        $('.loader').css("visibility", "visible");
+    },
+      success: function(response) {
+        if (response.redirect) {
+          window.location.href = response.redirect;
+        }
+      },
+    })
+  };
+  
+  function cancelform(){
+    location.href = "/sourceSystem";
+    document.getElementById("overlay").style.display = "block";
+    $('.loader').css("visibility", "visible");
+  };
+</script>

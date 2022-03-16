@@ -1,0 +1,27 @@
+sqlite3 /mnt/d/Data/solaris/python_workspace/myPython/datalake-webapp/sqlite/dlFmwrk.db
+
+create table source_systems(
+  src_sys_nm text primary key,
+  src_sys_id int,
+  mechanism text,
+  bucket_name text,
+  data_owner text,
+  support_cntct text
+)
+
+create table source_system_asset(
+  asset_id int,
+  src_sys_id int,
+  target_id int,
+  file_header text,
+  multipartition text,
+  file_type text,
+  asset_nm text,
+  subj_area_1 text,
+  support_cntct text,
+  trigger_file_pattern text,
+  subj_area_2 text,
+  asset_owner text,
+  file_delim text,
+  PRIMARY KEY ( asset_id, src_sys_id)
+)

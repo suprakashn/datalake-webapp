@@ -1,0 +1,156 @@
+[
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "quality_of_faculty",
+    "col_id": 7,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "publications",
+    "col_id": 8,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "citations",
+    "col_id": 10,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "country",
+    "col_id": 3,
+    "data_type": "String"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "institution",
+    "col_id": 2,
+    "data_type": "String"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "year",
+    "col_id": 14,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "patents",
+    "col_id": 12,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "influence",
+    "col_id": 9,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "national_rank",
+    "col_id": 4,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "score",
+    "col_id": 13,
+    "data_type": "Numeric"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "alumni_employment",
+    "col_id": 6,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": true,
+    "nullable": false,
+    "col_nm": "world_rank",
+    "col_id": 1,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "quality_of_education",
+    "col_id": 5,
+    "data_type": "Integral"
+  },
+  {
+    "data_classification": "non-confidential",
+    "col_desc": "column",
+    "col_length": 0,
+    "req_tokenization": false,
+    "pk_ind": false,
+    "nullable": false,
+    "col_nm": "broad_impact",
+    "col_id": 11,
+    "data_type": "Integral"
+  }
+]
