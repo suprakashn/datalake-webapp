@@ -1,4 +1,5 @@
-sqlite3 /mnt/d/Data/solaris/python_workspace/myPython/datalake-webapp/sqlite/dlFmwrk.db
+sqlite3 <sqlite directory in the project>/dlFmwrk.db
+e.g. sqlite3 /mnt/d/Data/solaris/python_workspace/myPython/datalake-webapp/sqlite/dlFmwrk.db
 
 create table source_systems(
   src_sys_nm text primary key,
@@ -25,3 +26,22 @@ create table source_system_asset(
   file_delim text,
   PRIMARY KEY ( asset_id, src_sys_id)
 )
+
+create table target_system(
+  tgt_sys_id int primary key,
+  bucket_name text,
+  domain text,
+  subdomain text,
+  data_owner text,
+  support_cntct text
+)
+
+INSERT INTO target_system
+VALUES(
+  10101,
+  "dl-fmwrk-tgt-10101-us-east-1",
+  "university",
+  "university_rankings",
+  "Vismaya Kalaiselvan",
+  "vismaya.kalaisel@tigeranalytics.com"
+);

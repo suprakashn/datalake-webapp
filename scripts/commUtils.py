@@ -17,18 +17,82 @@ def getGlobalParams():
         return global_config
 
 
+def create_insert_asset_dq(adv_dq_dict, asset_id, region):
+    dynamodb = boto3.resource('dynamodb', region_name = region)
+    global_config = getGlobalParams()
+
+    print('Creating the table {}.adv_dq.{} in {}'.format(global_config["fm_prefix"], str(asset_id), region))
+    asset_dq_table = dynamodb.create_table(
+      TableName=global_config["fm_prefix"] + ".adv_dq." + str(asset_id),
+      KeySchema=[
+        {
+          'AttributeName': 'dq_id',
+          'KeyType': 'HASH'
+        },
+      ],
+      AttributeDefinitions=[
+        {
+          'AttributeName': 'dq_id',
+          'AttributeType': 'S'
+        },
+      ],
+      ProvisionedThroughput={
+        'ReadCapacityUnits': 1,
+        'WriteCapacityUnits': 1,
+      }
+    )
+    time.sleep(10)
+
+    print(
+        "Inserting column info in {}.adv_dq.{} table in {}".format(
+            global_config["fm_prefix"], asset_id, region
+        )
+    )
+    for rows in adv_dq_dict["adv_dq_rules"]:
+        item = json.dumps(rows)
+        jsonItem = json.loads(item)
+        asset_dq_table = dynamodb.Table(
+            "{}.adv_dq.{}".format(global_config["fm_prefix"], asset_id)
+        )
+        response = asset_dq_table.put_item(Item=jsonItem)
+
+
 def insert_asset_item_dynamoDB(asset_json_file, asset_id, region):
     dynamodb = boto3.resource("dynamodb", region_name=region)
     global_config = getGlobalParams()
 
-    with open(asset_json_file) as json_file:
-        asset_config = json.load(json_file)
+    asset_config = json.loads(asset_json_file)
+
+    # Remove advanced dq rules from asset_config dict and create new dict for it
+    adv_dq = asset_config["adv_dq"].splitlines()
+    adv_dq_dict = {"adv_dq_rules": []}
+    count = 0
+    
+    for v in adv_dq:
+        dq_dict_item = {"dq_id": str(asset_id) + "_" + str(count), "dq_rule": v}
+        adv_dq_dict["adv_dq_rules"].append(dq_dict_item)
+        count = count + 1
+    asset_config.pop("adv_dq")
+
+    print(type(adv_dq_dict["adv_dq_rules"]))
+
+    # Create advance dq table and insert rules (if there are rules defined)
+    if adv_dq_dict["adv_dq_rules"]:
+        create_insert_asset_dq(adv_dq_dict, asset_id, region)
 
     asset_config.update({"asset_id": asset_id})
     item = json.dumps(asset_config)
 
     asset_table = dynamodb.Table("{}.data_asset".format(global_config["fm_prefix"]))
     jsonItem = json.loads(item)
+
+    jsonItem["src_sys_id"] = int(jsonItem["src_sys_id"])
+    jsonItem["target_id"] = int(jsonItem["target_id"])
+    for key, val in jsonItem.items():
+        if val == 'true':
+            val = True
+        elif val == 'false':
+            val = False
 
     print(
         "Inserting {} info in {}.data_asset table in {}".format(
@@ -42,9 +106,18 @@ def insert_asset_cols_dynamoDB(asset_col_json_file, asset_id, region):
     dynamodb = boto3.resource("dynamodb", region_name=region)
     global_config = getGlobalParams()
 
-    with open(asset_col_json_file) as json_file:
-        asset_col_config = json.load(json_file)
+    asset_col_config = json.loads(asset_col_json_file)
 
+    for listItem in asset_col_config["columns"]:
+        listItem["col_id"] = int(listItem["col_id"])
+        listItem["col_length"] = 0 if not listItem["col_length"] else int(listItem["col_length"])
+        for key, val in listItem.items():
+            if val == 'true':
+                val = True
+            elif val == 'false':
+                val = False
+
+    print(asset_col_config)
     print(
         "Inserting column info in {}.data_asset.{} table in {}".format(
             global_config["fm_prefix"], asset_id, region
@@ -113,8 +186,7 @@ def create_asset_detail_table(asset_id, region):
 
 def create_src_s3_dir_str(asset_id, asset_json_file, region):
     global_config = getGlobalParams()
-    with open(asset_json_file) as json_file:
-        asset_config = json.load(json_file)
+    asset_config = json.loads(asset_json_file)
 
     src_sys_id = asset_config["src_sys_id"]
     bucket_name = global_config["fm_prefix"] + "-" + str(src_sys_id) + "-" + region

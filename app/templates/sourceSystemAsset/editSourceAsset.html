@@ -25,7 +25,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
 
-<body style="background-color: #f8f8f8">
+<body style="background-color: #d1c9c9">
   <div id="content">
     {% block header %}
     <div class="header">
@@ -43,45 +43,74 @@
     <h1 class="table_frame_heading" style="color:#bd2c2c">Modify Asset</h1>
     <div style="float:right; padding-right: 20px;">
       <div class="action-fmwrk-button;">
-        <button id="cancel_button"; class="fmwrk-button" type="button" style="float:right;">Cancel</button>
+        <button id="cancel_button"; class="fmwrk-button" type="button" style="float:right;" onclick="cancelform()">Cancel</button>
         <button id="submit_button"; class="fmwrk-button" type="button" style="float:right;" onclick="submitform()">Submit</button>
       </div>
     </div>
   </div>
-  <div class="triple_frame_section" style="overflow-x: auto; height: 500px;">
+  <div class="triple_frame_section" style="overflow-x: auto; height: 570px;">
     <div class="heading heading-style">{{gen_data.asset_nm}}</div>
     <form id="data_asset_gen_det">
-      <div class="triple_frame_section-left" style="padding-left: 100px;">
-        <label class="form_attribute_headings" for="src_sys_id">Data Asset Id</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="asset_id" name="asset_id" value="{{gen_data.asset_id}}" disabled><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Target System Id</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="target_id" name="target_id" value="{{gen_data.target_id}}" disabled><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">File Format</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="file_type" name="file_type" value="{{gen_data.file_type}}"><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Primary Subject Area</label><br>
+      <div class="triple_frame_section-left" style="padding-left: 50px;">
+        <label class="form_attribute_headings" for="asset_nm">Data Asset Name</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="asset_nm" name="asset_nm" value="{{gen_data.asset_nm}}" disabled><br><br>
+        <label class="form_attribute_headings" for="target_id">Target System Id</label><br>
+        <select class="form_attribute_values" id="target_id" name="target_id" type="text" style="width:31ch" disabled>
+          <option value="{{gen_data.target_id}}">{{gen_data.target_id}}</option>
+        </select><br><br>
+        <label class="form_attribute_headings" for="file_type">File Format</label><br>
+        <select class="form_attribute_values" id="file_type" name="file_type" type="text" style="width:31ch" value="{{gen_data.file_type}}">
+          <option selected hidden>{{gen_data.file_type}}</option>
+          <option value="csv">csv</option>
+          <option value="parquet">parquet</option>
+          <option value="json">json</option>
+        </select><br><br>
+        <label class="form_attribute_headings" for="subj_area_1">Primary Subject Area</label><br>
         <input class="form_attribute_values" size="30" type="text" id="subj_area_1" name="subj_area_1" value="{{gen_data.subj_area_1}}"><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Secondary Subject Area</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="subj_area_2" name="subj_area_2" value="{{gen_data.subj_area_2}}"><br><br>
-      </div>
-      <div class="triple_frame_section-middle" style="padding-left: 100px;">
-        <label class="form_attribute_headings" for="src_sys_id">Data Asset Name</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="asset_nm" name="asset_nm" value="{{gen_data.asset_nm}} disabled"><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">File Header</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="file_header" name="file_header" value="{{gen_data.file_header}}"><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Support Contact</label><br>
+        <label class="form_attribute_headings" for="subj_area_2">Secondary Subject Area</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="subj_area_2" name="subj_area_2" value="{{gen_data.subj_area_1}}"><br><br>
+        <label class="form_attribute_headings" for="support_cntct">Support Contact</label><br>
         <input class="form_attribute_values" size="30" type="text" id="support_cntct" name="support_cntct" value="{{gen_data.support_cntct}}"><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Data Owner</label><br>
+      </div>
+      <div class="triple_frame_section-middle" style="padding-left: 50px;">
+        <label class="form_attribute_headings" for="asset_id">Data Asset ID</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="asset_id" name="asset_id" value="{{gen_data.asset_id}}" disabled><br><br>
+        <label class="form_attribute_headings" for="file_header">File Header</label><br>
+        <select class="form_attribute_values" type="text" id="file_header" name="file_header" style="width:31ch" value="{{gen_data.file_header}}">
+          <option selected hidden>{{gen_data.file_header}}</option>
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select><br><br>
+        <label class="form_attribute_headings" for="multipartition">Multi-part Indicator</label><br>
+        <select class="form_attribute_values" id="multipartition" name="multipartition" type="text" style="width:31ch" disabled>
+          <option value="{{gen_data.multipartition}}">{{gen_data.multipartition}}</option>
+        </select><br><br>
+        <label class="form_attribute_headings" for="trigger_file_pattern">Trigger File Pattern</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="trigger_file_pattern" name="trigger_file_pattern" value="{{gen_data.trigger_file_pattern}}" disabled><br><br>
+        <label class="form_attribute_headings" for="file_delim">Delimiter</label><br>
+        <input class="form_attribute_values" size="30" type="text" id="file_delim" name="file_delim" value="{{gen_data.file_delim}}"><br><br>
+        <label class="form_attribute_headings" for="asset_owner">Data Owner</label><br>
         <input class="form_attribute_values" size="30" type="text" id="asset_owner" name="asset_owner" value="{{gen_data.asset_owner}}"><br><br>
       </div>
-      <div class="triple_frame_section-right" style="padding-left: 100px;">
+      <div class="triple_frame_section-right" style="padding-left: 50px;">
         <label class="form_attribute_headings" for="src_sys_id">Source System Id</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="src_sys_id" name="src_sys_id" value="{{gen_data.src_sys_id}}" disabled><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Multi-part Indicator</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="multipartition" name="multipartition" value="{{gen_data.multipartition}}" disabled><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Trigger File Pattern</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="trigger_file_pattern" name="trigger_file_pattern" value="{{gen_data.trigger_file_pattern}}" disabled><br><br>
-        <label class="form_attribute_headings" for="src_sys_id">Delimiter</label><br>
-        <input class="form_attribute_values" size="30" type="text" id="file_delim" name="file_delim" value="{{gen_data.file_delim}}"><br><br>
+        <select class="form_attribute_values" id="src_sys_id" name="src_sys_id" type="text" style="width:31ch" disabled>
+          <option value="{{gen_data.src_sys_id}}">{{gen_data.src_sys_id}}</option>
+        </select><br><br>
+        <label class="form_attribute_headings" for="adv_dq">Advanced DQ Rules</label><br>
+        <textarea id="dq_rules_text" class="form_attribute_values" cols="50" rows="8" style="color:rgb(168, 73, 73); padding-left: 5px; font-family:verdana; font-size: 0.8em;" wrap="off" type="text" id="adv_dq" name="adv_dq">
+        </textarea>
+        {% for dict_item in dq_data %}
+        <script>
+          if (typeof i !== 'undefined') {
+            var i = i + "\n" + '{{dict_item.dq_rule | safe}}'
+          }
+          else {
+            var i = '{{dict_item.dq_rule | safe}}'
+          }
+          document.getElementById("dq_rules_text").value = i;
+        </script>
+        {% endfor %}
       </div>
     </form>
   </div><br><br>
@@ -101,7 +130,7 @@
             </div>
             <div class="triple_frame_section-middle" style="padding-left: 100px;">
               <label class="form_attribute_headings" for="src_sys_id">Column Name</label><br>
-              <input class="form_attribute_values" size="20" type="text" id="col_nm{{dict_item.col_id}}" name="col_nm" value="{{dict_item.col_nm}}"><br><br>
+              <input class="form_attribute_values" size="20" type="text" id="col_nm{{dict_item.col_id}}" name="col_nm" value="{{dict_item.col_nm}}" disabled><br><br>
               <label class="form_attribute_headings" for="src_sys_id">Column Length</label><br>
               <input class="form_attribute_values" size="20" type="text" id="col_length{{dict_item.col_id}}" name="col_length" value="{{dict_item.col_length}}"><br><br>
               <label class="form_attribute_headings" for="src_sys_id">Nullable</label><br>
@@ -146,6 +175,7 @@
 
   function submitform(){
     $("#asset_id").prop('disabled', false);
+    $("#asset_nm").prop('disabled', false);
     $("#src_sys_id").prop('disabled', false);
     $("#target_id").prop('disabled', false);
     $("#multipartition").prop('disabled', false);
@@ -153,6 +183,7 @@
 
     for(i=1; i<=no_of_cols; i++) {
       $("#" + "col_id" + i).prop('disabled', false);
+      $("#" + "col_nm" + i).prop('disabled', false);
       $("#" + "data_classification" + i).prop('disabled', false);
       $("#" + "req_tokenization" + i).prop('disabled', false);
       $("#" + "data_type" + i).prop('disabled', false);
@@ -160,12 +191,14 @@
     }
     
     $("#asset_id").prop('disabled', true);
+    $("#asset_nm").prop('disabled', true);
     $("#src_sys_id").prop('disabled', true);
     $("#target_id").prop('disabled', true);
     $("#multipartition").prop('disabled', true);
 
     for(i=1; i<=no_of_cols; i++) {
       $("#" + "col_id" + i).prop('disabled', true);
+      $("#" + "col_nm" + i).prop('disabled', true);
       $("#" + "data_classification" + i).prop('disabled', true);
       $("#" + "req_tokenization" + i).prop('disabled', true);
       $("#" + "data_type" + i).prop('disabled', true);
@@ -191,5 +224,11 @@
         }
       },
     })
+  };
+
+  function cancelform(){
+    location.href = "/sourceSystemAsset";
+    document.getElementById("overlay").style.display = "block";
+    $('.loader').css("visibility", "visible");
   };
 </script>

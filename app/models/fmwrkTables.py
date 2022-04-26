@@ -57,6 +57,22 @@ class sourceSystemAsset(db.Model):
       'file_delim': self.file_delim
     }
 
+def sourceSystemAssetDqFunc(asset_id):
+  tablename = "adv_dq." + str(asset_id)
+  class sourceSystemAssetDq(db.Model):
+    __tablename__ = tablename
+    __table_args__ = {'extend_existing': True}
+    dq_id = db.Column(db.String(), primary_key=True, index=True)
+    dq_rule = db.Column(db.String(), primary_key=True, index=True)
+
+    def to_dict(self):
+      return {
+        'dq_id': self.dq_id,
+        'dq_rule': self.dq_rule
+      }
+  return sourceSystemAssetDq
+
+
 def sourceSystemAssetColumnsFunc(asset_id):
   tablename = "data_asset." + str(asset_id)
   class sourceSystemAssetColumns(db.Model):
@@ -85,3 +101,22 @@ def sourceSystemAssetColumnsFunc(asset_id):
         'data_type': self.data_type
       }
   return sourceSystemAssetColumns
+
+class targetSystem(db.Model):
+  __tablename__ = 'target_system'
+  tgt_sys_id = db.Column(db.Integer(), primary_key=True, index=True)
+  bucket_name = db.Column(db.String())
+  domain = db.Column(db.String())
+  subdomain = db.Column(db.String())
+  data_owner = db.Column(db.String())
+  support_cntct = db.Column(db.String())
+
+  def to_dict(self):
+    return {
+      'tgt_sys_id': self.tgt_sys_id,
+      'bucket_name': self.bucket_name,
+      'domain': self.domain,
+      'subdomain': self.subdomain,
+      'data_owner': self.data_owner,
+      'support_cntct': self.support_cntct
+    }

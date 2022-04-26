@@ -35,44 +35,50 @@
       $('#data tbody > tr').removeClass('tableRow_selected');
       $(this).addClass('tableRow_selected');
       var builtHTML = ' \
-      <div class="data_detail_frame"> \
-        <div style="float:left; padding-left: 85%; margin-top:-30px">\
+      <div class="data_detail_frame" style="height: 550px;"> \
+        <div style="float:left; padding-left: 80%; margin-top:-30px;">\
           <div class="action-fmwrk-button;">\
-            <button id="column_button"; class="fmwrk-button" type="button" style="float:right;">Columns</button>\
+            <button id="more_button"; class="fmwrk-button" type="button" style="float:right;">More..</button>\
             <button id="catalog_button"; class="fmwrk-button" type="button" style="float:right;">Catalog</button>\
           </div>\
         </div>\
-        <div id="content left" style="float:left; width: 50%; padding-left:150px; padding-top:20px"> \
-          <p class="dataDetail_headings">Data Asset Id</p> \
-          <p class="dataDetail_values">' + cur_row["asset_id"] + '</p> \
-          <p class="dataDetail_headings">Source System Id</p> \
-          <p class="dataDetail_values">' + cur_row["src_sys_id"] + '</p> \
-          <p class="dataDetail_headings">Data Asset Name</p> \
-          <p class="dataDetail_values">' + cur_row["asset_nm"] + '</p> \
-          <p class="dataDetail_headings">Primary Subject Area</p> \
-          <p class="dataDetail_values">' + cur_row["subj_area_1"] + '</p> \
-          <p class="dataDetail_headings">Target System Id</p> \
-          <p class="dataDetail_values">' + cur_row["target_id"] + '</p> \
-          <p class="dataDetail_headings">File Header</p> \
-          <p class="dataDetail_values">' + cur_row["file_header"] + '</p> \
-          <p class="dataDetail_headings">Multi-part Indicator</p> \
-          <p class="dataDetail_values">' + cur_row["multipartition"] + '</p> \
+        <div> <hr style="width:70%; margin-left:auto; margin-top:70px;color:#640000"></hr> </div>\
+        <div class="triple_frame_section" style="border-style: none; box-shadow:none;"> \
+            <div class="triple_frame_section-left" style="padding-left: 70px;"> \
+              <p class="dataDetail_headings">Data Asset Id</p> \
+              <p class="dataDetail_values">' + cur_row["asset_id"] + '</p> \
+              <p class="dataDetail_headings">Data Asset Name</p> \
+              <p class="dataDetail_values">' + cur_row["asset_nm"] + '</p> \
+              <p class="dataDetail_headings">File Format</p> \
+              <p class="dataDetail_values">' + cur_row["file_type"] + '</p> \
+              <p class="dataDetail_headings">Primary Subject Area</p> \
+              <p class="dataDetail_values">' + cur_row["subj_area_1"] + '</p> \
+              <p class="dataDetail_headings">Support Contact</p> \
+              <p class="dataDetail_values">' + cur_row["support_cntct"] + '</p> \
+            </div> \
+            <div class="triple_frame_section-middle" style="padding-left: 70px;"> \
+              <p class="dataDetail_headings">Target System Id</p> \
+              <p class="dataDetail_values">' + cur_row["target_id"] + '</p> \
+              <p class="dataDetail_headings">File Header</p> \
+              <p class="dataDetail_values">' + cur_row["file_header"] + '</p> \
+              <p class="dataDetail_headings">Trigger File Pattern</p> \
+              <p class="dataDetail_values">' + cur_row["trigger_file_pattern"] + '</p> \
+              <p class="dataDetail_headings">Secondary Subject Area</p> \
+              <p class="dataDetail_values">' + cur_row["subj_area_2"] + '</p> \
+              <p class="dataDetail_headings">Data Owner</p> \
+              <p class="dataDetail_values">' + cur_row["asset_owner"] + '</p> \
+            </div> \
+            <div class="triple_frame_section-right" style="padding-left: 70px;"> \
+              <p class="dataDetail_headings">Source System Id</p> \
+              <p class="dataDetail_values">' + cur_row["src_sys_id"] + '</p> \
+              <p class="dataDetail_headings">Multi-part Indicator</p> \
+              <p class="dataDetail_values">' + cur_row["multipartition"] + '</p> \
+              <p class="dataDetail_headings">Delimiter</p> \
+              <p class="dataDetail_values">' + cur_row["Delimiter"] + '</p> \
+            </div> \
         </div> \
-        <div id="content right" style="float:right; padding-right: 200px; padding-top:20px"> \
-            <p class="dataDetail_headings">File Format</p> \
-            <p class="dataDetail_values">' + cur_row["file_type"] + '</p> \
-            <p class="dataDetail_headings">Support Contact</p> \
-            <p class="dataDetail_values">' + cur_row["support_cntct"] + '</p> \
-            <p class="dataDetail_headings">Trigger File Pattern</p> \
-            <p class="dataDetail_values">' + cur_row["trigger_file_pattern"] + '</p> \
-            <p class="dataDetail_headings">Secondary Subject Area</p> \
-            <p class="dataDetail_values">' + cur_row["subj_area_2"] + '</p> \
-            <p class="dataDetail_headings">Data Owner</p> \
-            <p class="dataDetail_values">' + cur_row["asset_owner"] + '</p> \
-            <p class="dataDetail_headings">Delimiter</p> \
-            <p class="dataDetail_values">' + cur_row["file_delim"] + '</p> \
-        </div> \
-      </div>'
+      </div> '
+
 
       document.getElementById("srcSysAttributes").innerHTML = builtHTML;
       if ($(this).hasClass('tableRow_selected')) {
@@ -95,14 +101,16 @@
         location.href = "/sourceSystemAsset/catalogSourceAsset?asset_id="+cur_row["asset_id"];
       }
 
-      document.getElementById("column_button").onclick = function () {
+      document.getElementById("more_button").onclick = function () {
         location.href = "/sourceSystemAsset/columnSourceAsset?asset_id="+cur_row["asset_id"];
       }
+
     });
     document.getElementById("create_button").onclick = function () {
       location.href = "/sourceSystemAsset/createSourceAsset";
     }
   });
+
 </script>
 {% endblock %}
 

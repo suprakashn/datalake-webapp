@@ -199,18 +199,58 @@ div.datatable-wide {
   line-height:20%;
 }
 
-input.form_attribute_values {
+input.form_attribute_values, select.form_attribute_values {
   color:rgb(168, 73, 73); 
   font-family:Helvetica; 
   font-size:15px;
   line-height:15%;
-  size: 50;
   padding-top: 7px;
   padding-bottom: 7px;
-  vertical-align:middle;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: thin;
+  border-color: #920000;
+  border-radius: 4px;
+  min-width: 20ch;
 }
 
-select{
+input.form_attribute_values:disabled, select.form_attribute_values:disabled {
+  color:rgb(168, 73, 73); 
+  font-family:Helvetica; 
+  font-size:15px;
+  line-height:15%;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: thin;
+  border-color: #920000;
+  border-radius: 4px;
+  min-width: 20ch;
+  background: #eee7e7;
+}
+
+textarea {
+  width: 31ch;
+  height: 24ch;
+  padding: 12px 8px;
+  padding-top: 7px;
+  box-sizing: border-box;
+  border: thin solid #920000;
+  border-radius: 4px;
+  color:rgb(168, 73, 73); 
+  font-family:Helvetica; 
+  font-size:15px;
+  overflow-x: scroll;
+}
+
+textarea:disabled {
+  border: thin solid #92000028;
+  background-color: #fce0e0;
+  resize: none;
+}
+
+/*select{
   color:rgb(168, 73, 73); 
   font-family:Helvetica; 
   font-size:15px;
@@ -221,6 +261,21 @@ select{
   vertical-align:middle;
   width: 150px;
 }
+
+select.form_attribute_values {
+  color:rgb(168, 73, 73); 
+  font-family:Helvetica; 
+  font-size:15px;
+  line-height:15%;
+  size: 50;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: thin;
+  border-color: #920000;
+  border-radius: 8px;
+}*/
 
 .grid-container {
   display: grid;
@@ -384,7 +439,7 @@ dl.form dd {
   border-bottom: 2px groove rgb(250, 250, 250);
   border-width: 1px;
   width: 100%;
-  height: 10%;
+  height: 50px;
 }
 
 .heading-style {
@@ -409,4 +464,44 @@ dl.form dd {
   border: 1px solid rgba(235, 206, 206, 0.863);
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }

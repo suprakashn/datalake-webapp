@@ -1,13 +1,16 @@
 from urllib import response
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, escape
 from flask_sqlalchemy import SQLAlchemy
 import json
 import dynamodb.dynamoDbUtils as dynamoDbUtils
 import app.models.fmwrkTables as fmwrkTables
 import os
+import ast
+import html
 from dynamodb.dynamoDbUtils import updateSourceSystem
 from dynamodb.dynamoDbUtils import updateSourceSystemAsset
 from scripts.setupSourceSystem import createSourceSystem
+from scripts.setupSourceAsset import createSourceAsset
 
 app = Flask(__name__,
   static_url_path='', 
@@ -110,22 +113,32 @@ def columnSourceAsset():
 def columnSourceAsset():
   asset_id_val = request.args.get('asset_id')
   dynamoDbUtils.scanSourceSystemAssetColumns(asset_id_val)
+  dynamoDbUtils.scanSourceSystemAssetDq(asset_id_val)
   gen_asset_detail = fmwrkTables.sourceSystemAsset.query.filter_by(asset_id=asset_id_val).all()
   col_asset_detail = fmwrkTables.sourceSystemAssetColumnsFunc(asset_id_val).query.all()
-  #.__class__.query.all()
+  gen_asset_dq = fmwrkTables.sourceSystemAssetDqFunc(asset_id_val).query.all()
+
   for u in gen_asset_detail:
     gen_data = u.__dict__
 
   col_data = [v.__dict__ for v in col_asset_detail]
   sorted_col_data = sorted(col_data, key=lambda d: d['col_id'])
+  #for v in col_asset_detail:
+  #  print(v.__dict__)
 
-  return render_template('sourceSystemAsset/columnSourceAsset.html', gen_data=gen_data, col_data=sorted_col_data)
+  dq_data = [w.__dict__ for w in gen_asset_dq]
+  
+  return render_template('sourceSystemAsset/columnSourceAsset.html', gen_data=gen_data, col_data=sorted_col_data, dq_data=dq_data)
 
 @app.route('/sourceSystemAsset/editSourceAsset')
 def sourceSystemAssetEdit():
   asset_id_val = request.args.get('asset_id')
+  dynamoDbUtils.scanSourceSystemAsset()
+  dynamoDbUtils.scanSourceSystemAssetColumns(asset_id_val)
+  dynamoDbUtils.scanSourceSystemAssetDq(asset_id_val)
   gen_asset_detail = fmwrkTables.sourceSystemAsset.query.filter_by(asset_id=asset_id_val).all()
   col_asset_detail = fmwrkTables.sourceSystemAssetColumnsFunc(asset_id_val).query.all()
+  gen_asset_dq = fmwrkTables.sourceSystemAssetDqFunc(asset_id_val).query.all()
 
   for u in gen_asset_detail:
     gen_data = u.__dict__
@@ -134,23 +147,57 @@ def sourceSystemAssetEdit():
   sorted_col_data = sorted(col_data, key=lambda d: d['col_id'])
   no_of_cols = len(sorted_col_data)
 
-  return render_template('sourceSystemAsset/editSourceAsset.html', gen_data=gen_data, col_data=sorted_col_data, no_of_cols=no_of_cols)
+  dq_data = [w.__dict__ for w in gen_asset_dq]
+
+  return render_template('sourceSystemAsset/editSourceAsset.html', gen_data=gen_data, col_data=sorted_col_data, no_of_cols=no_of_cols, dq_data=dq_data)
 
 @app.route('/sourceSystemAsset/editSourceAsset/modify', methods=['GET', 'POST'])
 def editSrcAsset():
   if request.method == "POST":
     columnsSet = []
-    i = 0
     dataAssetGenDet = json.dumps(json.loads(request.json['dataAssetGenDet']))
     dataAssetColDet = request.json['dataAssetColDet']
-    for items in dataAssetColDet['columns']:
-      columnsSet[i] = str(items)
-      i = i+1
+    
+    for item in dataAssetColDet['columns']:
+      dict_item = ast.literal_eval(item)
+      columnsSet.append(dict_item)
+
+    #finalDataAssetColDet = {"columns":columnsSet}
+    response = updateSourceSystemAsset(dataAssetGenDet, dataAssetColDet)
+    return jsonify({"redirect": "/sourceSystemAsset"})
+
+
+@app.route('/sourceSystemAsset/createSourceAsset')
+def sourceSystemAssetCreate():
+  target_system = fmwrkTables.targetSystem.query.all()
+  target_system_dict = [v.__dict__ for v in target_system]
+
+  source_system = fmwrkTables.sourceSystem.query.all()
+  #source_system_dict = db.session.query(fmwrkTables.sourceSystem.src_sys_id).all()
+  source_system_dict = [v.__dict__ for v in source_system]
+
+  #print("--------------" + target_system_dict["tgt_sys_id"])
+  #print("--------------" + str(source_system_dict[1][0]))
+
+  return render_template('sourceSystemAsset/createSourceAsset.html', col_data=[], target_system_dict = target_system_dict, source_system_dict = source_system_dict)
+
+
+@app.route('/sourceSystemAsset/editSourceAsset/create', methods=['GET', 'POST'])
+def createSrcAsset():
+  if request.method == "POST":
+    columnsSet = []
+    dataAssetGenDet = json.dumps(json.loads(request.json['dataAssetGenDet']))
+    dataAssetColDet = request.json['dataAssetColDet']
+    
+    for item in dataAssetColDet['columns']:
+      dict_item = ast.literal_eval(item)
+      columnsSet.append(dict_item)
 
     finalDataAssetColDet = {"columns":columnsSet}
-    print(finalDataAssetColDet)
-    response = updateSourceSystemAsset(dataAssetGenDet, dataAssetColDet)
-    #return jsonify({"redirect": "/sourceSystemAsset"})
+
+    print("----------Columns---------" + json.dumps(dataAssetGenDet))
+    response = createSourceAsset(dataAssetGenDet, json.dumps(finalDataAssetColDet))
+    return jsonify({"redirect": "/sourceSystemAsset"})
 
 if __name__ == '__main__':
   #print(sourceSystemData())
